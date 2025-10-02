@@ -2,6 +2,7 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app/wrappers';
+import { resolve } from 'path';
 
 export default defineConfig((/* ctx */) => {
   return {
@@ -63,7 +64,13 @@ export default defineConfig((/* ctx */) => {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf: any) {
+        viteConf.resolve = viteConf.resolve || {}
+        viteConf.resolve.alias = {
+          ...viteConf.resolve.alias,
+          '@': resolve(__dirname, 'src')
+        }
+      },
       // viteVuePluginOptions: {},
       
       // vitePlugins: [
@@ -74,12 +81,28 @@ export default defineConfig((/* ctx */) => {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      proxy: {
+        '/api/v1': {
+          target: 'https://localhost:8443',
+          changeOrigin: true,
+          secure: false
+        },
+        '/grammy/band': {
+          target: 'https://localhost:8181',
+          changeOrigin: true,
+          secure: false
+        },
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
     framework: {
-      config: {},
+      config: {
+        notify: {
+          position: 'top',
+        }
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
@@ -92,7 +115,10 @@ export default defineConfig((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify',
+        'Dialog'
+      ],
     },
 
     // animations: 'all', // --- includes all animations
