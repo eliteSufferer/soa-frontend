@@ -4,7 +4,7 @@
 import { defineConfig } from '#q-app/wrappers';
 import { resolve } from 'path';
 
-export default defineConfig((/* ctx */) => {
+export default defineConfig(() => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -56,6 +56,10 @@ export default defineConfig((/* ctx */) => {
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
       // publicPath: '/',
+      // env: {
+      //   VITE_MAIN_API_URL: ctx.prod ? '/api/v1' : '/api/v1',
+      //   VITE_GRAMMY_API_URL: ctx.prod ? 'https://localhost:8181/grammy/band' : '/grammy/band'
+      // },
       // analyze: true,
       // env: {},
       // rawDefine: {}

@@ -6,7 +6,7 @@ const isDev = import.meta.env.DEV
 
 
 const mainApi: AxiosInstance = axios.create({
-  baseURL: isDev ? '/api/v1' : 'https://localhost:8443/api/v1',
+  baseURL: isDev ? '/api/v1' : '/api/v1',
   headers: {
     'Content-Type': 'application/xml',
     'Accept': 'application/xml'

@@ -6,58 +6,192 @@
         color="primary" 
         label="Создать группу" 
         icon="add"
-        @click="showCreateDialog = true"
+        @click="openCreateDialog"
       />
     </div>
 
     <q-card class="q-mb-md">
       <q-card-section>
-        <div class="row q-gutter-md">
+        <div class="text-h6">Статистика</div>
+      </q-card-section>
+      <q-card-section class="row q-gutter-md">
+        <div class="col">
+          <div class="text-caption text-grey">Всего групп</div>
+          <div class="text-h4">{{ pagination.rowsNumber }}</div>
+        </div>
+        <div class="col">
+          <div class="text-caption text-grey">Среднее кол-во участников</div>
+          <div class="text-h4">{{ averageParticipants.toFixed(1) }}</div>
+        </div>
+      </q-card-section>
+    </q-card>
+
+<q-card class="q-mb-md">
+  <q-expansion-item
+    icon="filter_alt"
+    label="Фильтры"
+    :caption="activeFiltersCount > 0 ? `Активных: ${activeFiltersCount}` : 'Нажмите, чтобы развернуть'"
+    default-opened
+  >
+    <q-card-section>
+      <div class="q-gutter-md">
+        <div class="row q-gutter-sm items-center">
           <q-input
-            v-model="filterName"
+            v-model="filters.name.value"
             label="Название"
             outlined
             dense
-            style="width: 200px"
+            style="width: 250px"
           />
           <q-select
-            v-model="filterGenre"
+            v-model="filters.name.operator"
+            :options="stringOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm items-center">
+          <q-select
+            v-model="filters.genre.value"
             :options="genreOptions"
             label="Жанр"
             outlined
             dense
             clearable
-            style="width: 200px"
+            style="width: 250px"
           />
+          <q-select
+            v-model="filters.genre.operator"
+            :options="equalityOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm items-center">
+          <q-input
+            v-model.number="filters.numberOfParticipants.value"
+            label="Количество участников"
+            type="number"
+            outlined
+            dense
+            style="width: 250px"
+          />
+          <q-select
+            v-model="filters.numberOfParticipants.operator"
+            :options="numericOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm items-center">
+          <q-input
+            v-model.number="filters.albumsCount.value"
+            label="Количество альбомов"
+            type="number"
+            outlined
+            dense
+            style="width: 250px"
+          />
+          <q-select
+            v-model="filters.albumsCount.operator"
+            :options="numericOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm items-center">
+          <q-input
+            v-model.number="filters.coordinatesX.value"
+            label="Координата X"
+            type="number"
+            outlined
+            dense
+            style="width: 250px"
+          />
+          <q-select
+            v-model="filters.coordinatesX.operator"
+            :options="numericOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm items-center">
+          <q-input
+            v-model.number="filters.coordinatesY.value"
+            label="Координата Y"
+            type="number"
+            outlined
+            dense
+            style="width: 250px"
+          />
+          <q-select
+            v-model="filters.coordinatesY.operator"
+            :options="numericOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm items-center">
+          <q-input
+            v-model.number="filters.labelSales.value"
+            label="Продажи"
+            type="number"
+            outlined
+            dense
+            style="width: 250px"
+          />
+          <q-select
+            v-model="filters.labelSales.operator"
+            :options="numericOperators"
+            outlined
+            dense
+            style="width: 150px"
+            emit-value
+            map-options
+          />
+        </div>
+
+        <div class="row q-gutter-sm q-mt-md">
           <q-btn 
             color="primary" 
-            label="Применить" 
+            label="Применить фильтры" 
+            icon="filter_alt"
             @click="applyFilters"
           />
           <q-btn 
             color="grey" 
-            label="Сбросить" 
+            label="Сбросить все" 
             flat
             @click="resetFilters"
           />
         </div>
-      </q-card-section>
-    </q-card>
-
-    <q-card class="q-mb-md">
-  <q-card-section>
-    <div class="text-h6">Статистика</div>
-  </q-card-section>
-  <q-card-section class="row q-gutter-md">
-    <div class="col">
-      <div class="text-caption text-grey">Всего групп</div>
-      <div class="text-h4">{{ pagination.rowsNumber }}</div>
-    </div>
-    <div class="col">
-      <div class="text-caption text-grey">Среднее кол-во участников</div>
-      <div class="text-h4">{{ averageParticipants.toFixed(1) }}</div>
-    </div>
-  </q-card-section>
+      </div>
+    </q-card-section>
+  </q-expansion-item>
 </q-card>
 
     <q-table
@@ -174,9 +308,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useQuasar } from 'quasar'
-import type { MusicBand, MusicGenre } from '@/types/models'
+import type { MusicBand } from '@/types/models'
+import { MusicGenre } from '@/types/models'
 import { bandsApi } from '@/services/api'
 import BandDialog from '@/components/BandDialog.vue'
 import SingleDialog from '@/components/SingleDialog.vue'
@@ -190,10 +325,72 @@ const showCreateDialog = ref(false)
 const showSingleDialog = ref(false)
 const showParticipantDialog = ref(false)
 const selectedBand = ref<MusicBand | null>(null)
+const averageParticipants = ref(0)
 
-const filterName = ref('')
-const filterGenre = ref<MusicGenre | null>(null)
-const genreOptions = ['PROGRESSIVE_ROCK', 'POP', 'MATH_ROCK']
+const stringOperators = [
+  { label: 'Содержит', value: 'contains' },
+  { label: 'Равно', value: 'eq' },
+  { label: 'Не равно', value: 'ne' }
+]
+
+const numericOperators = [
+  { label: 'Равно', value: 'eq' },
+  { label: 'Не равно', value: 'ne' },
+  { label: 'Больше', value: 'gt' },
+  { label: 'Больше или равно', value: 'gte' },
+  { label: 'Меньше', value: 'lt' },
+  { label: 'Меньше или равно', value: 'lte' }
+]
+
+const equalityOperators = [
+  { label: 'Равно', value: 'eq' },
+  { label: 'Не равно', value: 'ne' }
+]
+
+const genreOptions: MusicGenre[] = [MusicGenre.PROGRESSIVE_ROCK, MusicGenre.POP, MusicGenre.MATH_ROCK]
+
+const filters = ref({
+  name: {
+    value: '',
+    operator: 'contains' as string
+  },
+  genre: {
+    value: null as MusicGenre | null,
+    operator: 'eq' as string
+  },
+  numberOfParticipants: {
+    value: null as number | null,
+    operator: 'eq' as string
+  },
+  albumsCount: {
+    value: null as number | null,
+    operator: 'gte' as string
+  },
+  coordinatesX: {
+    value: null as number | null,
+    operator: 'eq' as string
+  },
+  coordinatesY: {
+    value: null as number | null,
+    operator: 'eq' as string
+  },
+  labelSales: {
+    value: null as number | null,
+    operator: 'gt' as string
+  }
+})
+
+const activeFiltersCount = computed(() => {
+  let count = 0
+  if (filters.value.name.value) count++
+  if (filters.value.genre.value) count++
+  if (filters.value.numberOfParticipants.value !== null) count++
+  if (filters.value.albumsCount.value !== null) count++
+  if (filters.value.coordinatesX.value !== null) count++
+  if (filters.value.coordinatesY.value !== null) count++
+  if (filters.value.labelSales.value !== null) count++
+  return count
+})
 
 const pagination = ref({
   sortBy: 'id',
@@ -271,23 +468,21 @@ onMounted(() => {
   loadBands()
 })
 
-const averageParticipants = ref(0)
-
 async function loadBands() {
   loading.value = true
   try {
     const sort = buildSortParam()
-    const filters = buildFiltersParam()
+    const filterParams = buildFiltersParam()
+    
     
     const response = await bandsApi.getAll(
       pagination.value.page - 1,
       pagination.value.rowsPerPage,
       sort,
-      filters
+      filterParams
     )
     
     bands.value = response.bands
-    console.log(bands.value)
     pagination.value.rowsNumber = response.pagination.totalElements
     
     loadStatistics()
@@ -314,17 +509,37 @@ function buildSortParam(): string[] {
 }
 
 function buildFiltersParam(): string[] {
-  const filters: string[] = []
+  const filterParams: string[] = []
   
-  if (filterName.value) {
-    filters.push(`name:contains:${filterName.value}`)
+  if (filters.value.name.value) {
+    filterParams.push(`name:${filters.value.name.operator}:${filters.value.name.value}`)
   }
   
-  if (filterGenre.value) {
-    filters.push(`genre:eq:${filterGenre.value}`)
+  if (filters.value.genre.value) {
+    filterParams.push(`genre:${filters.value.genre.operator}:${filters.value.genre.value}`)
   }
   
-  return filters
+  if (filters.value.numberOfParticipants.value !== null && filters.value.numberOfParticipants.value !== undefined) {
+    filterParams.push(`numberOfParticipants:${filters.value.numberOfParticipants.operator}:${filters.value.numberOfParticipants.value}`)
+  }
+  
+  if (filters.value.albumsCount.value !== null && filters.value.albumsCount.value !== undefined) {
+    filterParams.push(`albumsCount:${filters.value.albumsCount.operator}:${filters.value.albumsCount.value}`)
+  }
+  
+  if (filters.value.coordinatesX.value !== null && filters.value.coordinatesX.value !== undefined) {
+    filterParams.push(`coordinates.x:${filters.value.coordinatesX.operator}:${filters.value.coordinatesX.value}`)
+  }
+  
+  if (filters.value.coordinatesY.value !== null && filters.value.coordinatesY.value !== undefined) {
+    filterParams.push(`coordinates.y:${filters.value.coordinatesY.operator}:${filters.value.coordinatesY.value}`)
+  }
+  
+  if (filters.value.labelSales.value !== null && filters.value.labelSales.value !== undefined) {
+    filterParams.push(`label.sales:${filters.value.labelSales.operator}:${filters.value.labelSales.value}`)
+  }
+  
+  return filterParams
 }
 
 function onRequest(props: any) {
@@ -344,10 +559,22 @@ function applyFilters() {
 }
 
 function resetFilters() {
-  filterName.value = ''
-  filterGenre.value = null
+  filters.value = {
+    name: { value: '', operator: 'contains' },
+    genre: { value: null, operator: 'eq' },
+    numberOfParticipants: { value: null, operator: 'eq' },
+    albumsCount: { value: null, operator: 'gte' },
+    coordinatesX: { value: null, operator: 'eq' },
+    coordinatesY: { value: null, operator: 'eq' },
+    labelSales: { value: null, operator: 'gt' }
+  }
   pagination.value.page = 1
   loadBands()
+}
+
+function openCreateDialog() {
+  selectedBand.value = null
+  showCreateDialog.value = true
 }
 
 function editBand(band: MusicBand) {
