@@ -49,6 +49,7 @@ export default defineConfig(() => {
       },
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'
+      // publicPath: ctx.dev ? '/' : '/frontend/',
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,

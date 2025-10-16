@@ -26,192 +26,202 @@
       </q-card-section>
     </q-card>
 
-<q-card class="q-mb-md">
-  <q-expansion-item
-    icon="filter_alt"
-    label="Фильтры"
-    :caption="activeFiltersCount > 0 ? `Активных: ${activeFiltersCount}` : 'Нажмите, чтобы развернуть'"
-    default-opened
-  >
-    <q-card-section>
-      <div class="q-gutter-md">
-        <div class="row q-gutter-sm items-center">
-          <q-input
-            v-model="filters.name.value"
-            label="Название"
-            outlined
-            dense
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.name.operator"
-            :options="stringOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+    <q-card class="q-mb-md">
+      <q-expansion-item
+        icon="filter_alt"
+        label="Фильтры"
+        :caption="activeFiltersCount > 0 ? `Активных: ${activeFiltersCount}` : 'Нажмите, чтобы развернуть'"
+        default-opened
+      >
+        <q-card-section>
+          <div class="q-gutter-md">
+            <div class="row q-gutter-sm items-center">
+              <q-input
+                v-model="filters.name.value"
+                label="Название"
+                outlined
+                dense
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.name.operator"
+                :options="stringOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm items-center">
-          <q-select
-            v-model="filters.genre.value"
-            :options="genreOptions"
-            label="Жанр"
-            outlined
-            dense
-            clearable
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.genre.operator"
-            :options="equalityOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+            <div class="row q-gutter-sm items-center">
+              <q-select
+                v-model="filters.genre.value"
+                :options="genreOptions"
+                label="Жанр"
+                outlined
+                dense
+                clearable
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.genre.operator"
+                :options="equalityOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm items-center">
-          <q-input
-            v-model.number="filters.numberOfParticipants.value"
-            label="Количество участников"
-            type="number"
-            outlined
-            dense
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.numberOfParticipants.operator"
-            :options="numericOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+            <div class="row q-gutter-sm items-center">
+              <q-input
+                v-model.number="filters.numberOfParticipants.value"
+                label="Количество участников"
+                type="number"
+                outlined
+                dense
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.numberOfParticipants.operator"
+                :options="numericOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm items-center">
-          <q-input
-            v-model.number="filters.albumsCount.value"
-            label="Количество альбомов"
-            type="number"
-            outlined
-            dense
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.albumsCount.operator"
-            :options="numericOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+            <div class="row q-gutter-sm items-center">
+              <q-input
+                v-model.number="filters.albumsCount.value"
+                label="Количество альбомов"
+                type="number"
+                outlined
+                dense
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.albumsCount.operator"
+                :options="numericOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm items-center">
-          <q-input
-            v-model.number="filters.coordinatesX.value"
-            label="Координата X"
-            type="number"
-            outlined
-            dense
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.coordinatesX.operator"
-            :options="numericOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+            <div class="row q-gutter-sm items-center">
+              <q-input
+                v-model.number="filters.coordinatesX.value"
+                label="Координата X"
+                type="number"
+                outlined
+                dense
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.coordinatesX.operator"
+                :options="numericOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm items-center">
-          <q-input
-            v-model.number="filters.coordinatesY.value"
-            label="Координата Y"
-            type="number"
-            outlined
-            dense
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.coordinatesY.operator"
-            :options="numericOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+            <div class="row q-gutter-sm items-center">
+              <q-input
+                v-model.number="filters.coordinatesY.value"
+                label="Координата Y"
+                type="number"
+                outlined
+                dense
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.coordinatesY.operator"
+                :options="numericOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm items-center">
-          <q-input
-            v-model.number="filters.labelSales.value"
-            label="Продажи"
-            type="number"
-            outlined
-            dense
-            style="width: 250px"
-          />
-          <q-select
-            v-model="filters.labelSales.operator"
-            :options="numericOperators"
-            outlined
-            dense
-            style="width: 150px"
-            emit-value
-            map-options
-          />
-        </div>
+            <div class="row q-gutter-sm items-center">
+              <q-input
+                v-model.number="filters.labelSales.value"
+                label="Продажи"
+                type="number"
+                outlined
+                dense
+                style="width: 250px"
+              />
+              <q-select
+                v-model="filters.labelSales.operator"
+                :options="numericOperators"
+                outlined
+                dense
+                style="width: 150px"
+                emit-value
+                map-options
+              />
+            </div>
 
-        <div class="row q-gutter-sm q-mt-md">
-          <q-btn 
-            color="primary" 
-            label="Применить фильтры" 
-            icon="filter_alt"
-            @click="applyFilters"
-          />
-          <q-btn 
-            color="grey" 
-            label="Сбросить все" 
-            flat
-            @click="resetFilters"
-          />
-        </div>
-      </div>
-    </q-card-section>
-  </q-expansion-item>
-</q-card>
+            <div class="row q-gutter-sm q-mt-md">
+              <q-btn 
+                color="primary" 
+                label="Применить фильтры" 
+                icon="filter_alt"
+                @click="applyFilters"
+              />
+              <q-btn 
+                color="grey" 
+                label="Сбросить все" 
+                flat
+                @click="resetFilters"
+              />
+            </div>
+          </div>
+        </q-card-section>
+      </q-expansion-item>
+    </q-card>
 
     <q-table
       :rows="bands"
       :columns="columns"
       row-key="id"
       :loading="loading"
-      :pagination="pagination"
+      v-model:pagination="pagination"
       @request="onRequest"
+      :rows-per-page-options="[5, 10, 15, 20, 25, 50]"
       binary-state-sort
     >
-    <template v-slot:no-data>
-      <div class="full-width justify-center items-center">
-        <div class="column justify-center items-center">
-          <div class="text-h6">Нет данных</div>
-          <q-icon name="sentiment_dissatisfied" size="40px" />
+      <template v-slot:no-data>
+        <div class="full-width row flex-center q-gutter-sm">
+          <q-icon name="sentiment_dissatisfied" size="2em" />
+          <span>Нет данных</span>
         </div>
-      
-      </div>
-    </template>
+      </template>
+
+      <template v-slot:body-cell-name="props">
+        <q-td :props="props">
+          <div class="ellipsis-text">
+            {{ props.value }}
+            <q-tooltip v-if="props.value && props.value.length > 30">
+              {{ props.value }}
+            </q-tooltip>
+          </div>
+        </q-td>
+      </template>
+
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <q-btn
@@ -474,7 +484,6 @@ async function loadBands() {
     const sort = buildSortParam()
     const filterParams = buildFiltersParam()
     
-    
     const response = await bandsApi.getAll(
       pagination.value.page - 1,
       pagination.value.rowsPerPage,
@@ -488,6 +497,11 @@ async function loadBands() {
     loadStatistics()
   } catch (error) {
     console.error('Failed to load bands:', error)
+    $q.notify({
+      type: 'negative',
+      message: 'Ошибка загрузки данных',
+      position: 'top'
+    })
   } finally {
     loading.value = false
   }
@@ -611,6 +625,11 @@ function confirmDelete(band: MusicBand) {
       }
     } catch (error) {
       console.error('Failed to delete band:', error)
+      $q.notify({
+        type: 'negative',
+        message: 'Ошибка при удалении группы',
+        position: 'top'
+      })
     }
   })
 }
@@ -646,3 +665,13 @@ function getGenreColor(genre: string): string {
   return colors[genre] || 'grey'
 }
 </script>
+
+<style scoped>
+.ellipsis-text {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+</style>

@@ -62,7 +62,7 @@
   
   interface Props {
     modelValue: boolean
-    bandId?: number | null
+    bandId?: number | null | undefined
   }
   
   const props = defineProps<Props>()
